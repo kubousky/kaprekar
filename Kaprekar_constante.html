@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <title>Kaprekar constant</title>
+    <link href="https://fonts.googleapis.com/css?family=News+Cycle&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css" integrity="sha256-2YQRJMXD7pIAPHiXr0s+vlRWA7GYJEK0ARns7k2sbHY=" crossorigin="anonymous" />
+    <style media="screen">
+    body{font-family: 'News Cycle', sans-serif; font-size: 24px;}
+    #title{background-color: #636e72; border-radius: 5px; font: white; padding-left: 20px; min-height: 30px}
+    #explanation{ padding-left: 25px; padding-right: 25px}
+    #wiki{font-size:16px;}
+    #exception{background-color: #fdcb6e; border-radius: 5px; padding-left: 15px;}
+    #operations{border: 2px solid; border-color: #636e72; border-radius: 5px; padding: 25px;}
+    /* .btn{min-width: 200px; min-height:50px; background-color: #dfe6e9; font-size: 15px} */
+    #rutinas{list-style-type: none;}
+    </style>
+</head>
+<body>
+    <h2 id="title">El misterioso número <strong>6174</strong></h2>
+    <div id="explanation">
+        <div id="wiki">
+            <p>El número 6174 es conocido como la Constante de Kaprekar en honor de su descubridor el matemático indio Dattatreya Ramachandra Kaprekar. Este número es el resultado de la aplicación repetida de la Operación de Kaprekar1​2​ que consiste en los siguientes pasos:</p>
+            <ol>
+                <li>Escoger cualquier número de cuatro dígitos (con limitadas excepciones, véase más abajo).</li>
+                <li>Ordenar los cuatro dígitos en orden descendente, para obtener el minuendo de una resta.</li>
+                <li>Ordenar los mismos cuatro dígitos en orden ascendente, para obtener el sustraendo de la misma resta.</li>
+                <li>Calcular el resto, restando el sustraendo del minuendo.</li>
+                <li>Si el resto no es igual a 6174, repetir los cuatro pasos anteriores, añadiendo ceros a la derecha al minuendo y a la izquierda al sustraendo, siempre que sea necesario para completar los cuatro dígitos.</li>
+            </ol>
+        </div>
+    </div>
+    <p id="exception"></p>
+    <div id="operations">
+        <p>Introduce un número de cuatro digitos:</p>
+        <form id="myForm">
+            <input id="numero" type="text">
+            <button id="calculate" type="button" name="button">Calcular</button>
+            <input type="button" onclick="myFunction()" value="Clear">
+        </form>
+        <p id="result">Número de rutinas: </p>
+        <p>Rutinas: </p>
+        <ul id="rutinas"></ul>
+    </div>
+
+<script type="text/javascript">
+
+    const kaprekar_const = 6174;
+    
+    function stringToList(w){     
+        let list = [];
+        for(let i=0; i < w.length;i++){
+            list.push(w[i])   
+        }
+        return list; 
+    }
+
+    function intoNumberList(l){
+        for(let i=0; i<l.length; i++){
+            l[i] = parseInt(l[i])
+        }return l;    
+    }
+
+    function decreasingOrder(l){
+        for(let i = 0; i < l.length; i++){ 
+            for(let j = i+1; j < l.length; j++){  
+                if(l[i] < l[j]){  
+                    temp = l[i];
+                    l[i] = l[j];
+                    l[j] = temp;
+                }
+            }
+        } return l;    
+    }
+
+    function increasingOrder(l){
+        for(let i = 0; i < l.length; i++){ 
+            for(let j = i+1; j < l.length; j++){  
+                if(l[i] > l[j]){  
+                    temp = l[i];
+                    l[i] = l[j];
+                    l[j] = temp;
+                }
+            }
+        } return l;
+    }
+
+    function numberListToString(l){
+        let string = "";
+        for(let i=0; i<l.length; i++){
+            string += l[i];
+        }
+        return string;
+    }
+
+    function stringToInt(s){
+        let num = parseInt(s);
+        return num;
+    }
+
+    function sameDigitsCheck(s){
+        let same = false;
+        let l = stringToList(s);
+            if(l[0]==l[1] && l[0]==l[2] && l[0]==l[3]){
+                same = true;
+            }
+        return same;
+    }
+
+    function operationsNumber(s){
+        let result;
+        let iteration_number = 0
+        let string = s;
+        if(sameDigitsCheck(s)){
+            return "Has introducido un número de cuatro digitos iguales! Vuelve a introducir otro número.";
+        }
+        if(s.length != 4){
+            return "El número introducido tiene que tener cuatro digitos! Vuelve a introducir otro número.";
+        }
+        while(result!=kaprekar_const){
+            iteration_number++;
+            let highestNum = stringToInt(numberListToString(decreasingOrder(intoNumberList(stringToList(string)))));
+            let smallestNum = stringToInt(numberListToString(increasingOrder(intoNumberList(stringToList(string)))));
+            result = highestNum-smallestNum;
+            agregarElemento((highestNum + ' - ' + smallestNum + ' = ' + result), "li", "rutinas");
+            string = result.toString();
+            if(string.length==3){
+                string = "0" + string;
+                console.log("Adding zero at the beginning:")
+            }
+            if(iteration_number > 20){
+                return "El algoritmo ha sido parado! Ha superado " + iteration_number + " iteraciones!";
+            }
+        }
+        return iteration_number;
+    }
+
+    function agregarElemento(dato, elemento, id){
+        var node = document.createElement(elemento);
+        var textnode = document.createTextNode(dato);
+        node.appendChild(textnode);
+        document.getElementById(id).appendChild(node);
+    }
+
+    let cal = document.getElementById('calculate');
+
+    cal.onclick = function(){
+
+        let str = document.getElementById('numero').value;
+        let output = operationsNumber(str);
+        if(typeof(output)=="string"){
+            let exep = document.getElementById('exception').innerHTML += output;
+        }else{
+            let res = document.getElementById('result').innerHTML += output;
+        }
+    }
+
+    function myFunction(){
+        document.getElementById("myForm").reset();
+        let res = document.getElementById('result').innerHTML = "Número de rutinas: ";
+        let exep = document.getElementById('exception').innerHTML = "";
+        let rut = document.getElementById('rutinas').innerHTML = "";
+    }
+
+    </script>
+
+</body>
+</html>
