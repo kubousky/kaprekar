@@ -1,0 +1,31 @@
+body{
+    font-family: 'News Cycle', sans-serif; 
+    font-size: 24px;
+}
+#title{
+    background-color: #636e72; 
+    border-radius: 5px; 
+    font: white; 
+    padding-left: 20px; 
+    min-height: 30px}
+#explanation{
+    padding-left: 25px; 
+    padding-right: 25px
+}
+#wiki{
+    font-size:16px;
+}
+#exception{
+    background-color: #fdcb6e; 
+    border-radius: 5px; 
+    padding-left: 15px;
+}
+#operations{
+    border: 2px solid; 
+    border-color: #636e72; 
+    border-radius: 5px; 
+    padding: 25px;
+}
+#rutinas{
+    list-style-type: none;
+}
