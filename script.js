@@ -1,3 +1,5 @@
+console.log("Test");
+
 const kaprekar_const = 6174;
     
 function stringToList(w){     
